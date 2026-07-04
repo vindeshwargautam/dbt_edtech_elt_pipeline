@@ -8,7 +8,7 @@ select
     payment_date,
     payment_amount,
     trim(payment_method) as payment_method,
-    trim(COALESCE(payment_status,'Unknown')) as paymen
+    trim(COALESCE(payment_status,'Unknown')) as payment,
     transaction_id,
     created_at,
     updated_at
