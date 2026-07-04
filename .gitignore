@@ -1,0 +1,9 @@
+# Python Virtual Environment
+venv/
+.venv/
+
+# Logs
+logs/
+
+# OS Files
+.DS_Store

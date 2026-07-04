@@ -1,0 +1,311 @@
+version: 2
+
+models:
+
+  - name: stg_students
+    description: "Cleaned student master data."
+
+    columns:
+      - name: student_id
+        description: "Unique identifier for each student."
+        tests:
+          - unique
+          - not_null
+
+      - name: email
+        description: "Student email address."
+
+      - name: gender
+        description: "Student gender."
+        tests:
+          - accepted_values:
+              arguments:
+                values:
+                  - Male
+                  - Female
+
+      - name: registration_date
+        description: "Student registration date."
+        tests:
+          - not_null
+
+      - name: status
+        description: "Student account status."
+
+      - name: created_at
+        description: "Student creation date."
+        tests:
+          - not_null
+        
+      - name: updated_at
+        description: "Student updation date."
+        tests:
+          - not_null
+       
+
+
+
+  - name: stg_instructors
+    description: "Cleaned instructor master data."
+
+    columns:
+
+      - name: instructor_id
+        description: "Unique identifier for each instructor."
+        tests:
+          - unique
+          - not_null
+
+      - name: email
+        description: "Instructor email address."
+        tests:
+          - unique
+          - not_null
+
+      - name: specialization
+        description: "Instructor specialization."
+
+      - name: hire_date
+        description: "Instructor hire date."
+        tests:
+          - not_null
+
+      - name: status
+        description: "Current instructor status."
+
+      - name: created_at
+        description: "Instructor creation date."
+        tests:
+          - not_null
+        
+      - name: updated_at
+        description: "Instructor updation date."
+        tests:
+          - not_null
+
+          
+       
+  - name: stg_courses
+    description: "Cleaned course master data."
+
+    columns:
+
+      - name: course_id
+        description: "Unique identifier for each course."
+        tests:
+          - unique
+          - not_null
+
+      - name: instructor_id
+        description: "Instructor assigned to the course."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_instructors')
+                field: instructor_id
+
+      - name: difficulty_level
+        description: "Course difficulty level."
+        tests:
+          - accepted_values:
+              arguments:
+                values:
+                  - Beginner
+                  - Intermediate
+                  - Advanced
+
+      - name: price
+        description: "Course price."
+        tests:
+          - not_null
+
+      - name: created_date
+        description: "Course creation date."
+        tests:
+          - not_null
+
+      - name: status
+
+      - name: created_at
+        description: "Course creation date."
+        tests:
+          - not_null
+        
+      - name: updated_at
+        description: "Course updation date." 
+        tests:
+          - not_null 
+               
+
+
+  - name: stg_enrollments
+    description: "Cleaned student enrollment records."
+
+    columns:
+
+      - name: enrollment_id
+        description: "Unique identifier for each enrollment."
+        tests:
+          - unique
+          - not_null
+
+      - name: student_id
+        description: "Student identifier."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_students')
+                field: student_id
+
+      - name: course_id
+        description: "Course identifier."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_courses')
+                field: course_id
+
+      - name: enrollment_date
+        description: "Date on which the student enrolled."
+        tests:
+          - not_null
+
+      - name: completion_status
+        description: "Current enrollment status."
+
+
+      - name: created_at
+        description: "Enrollment creation date."
+        tests:
+          - not_null
+        
+      - name: updated_at
+        description: "Enrollment updation date." 
+        tests:
+          - not_null   
+
+
+
+  - name: stg_course_progress
+    description: "Cleaned student course progress."
+
+    columns:
+
+      - name: progress_id
+        description: "Unique identifier for course progress."
+        tests:
+          - unique
+          - not_null
+
+      - name: student_id
+        description: "Student identifier."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_students')
+                field: student_id
+
+      - name: course_id
+        description: "Course identifier."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_courses')
+                field: course_id
+
+      - name: completion_percent
+        description: "Course completion percentage."
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              arguments:
+                min_value: 0
+                max_value: 100
+
+      - name: last_activity_date
+        description: "Last activity date."
+        tests:
+          - not_null
+
+      - name: status
+        description: "Current progress status."
+
+
+      - name: created_at
+        description: "Progress creation date."
+        tests:
+          - not_null
+        
+      - name: updated_at
+        description: "Progress updation date." 
+        tests:
+          - not_null  
+                    
+
+
+  - name: stg_payments
+    description: "Cleaned payment transaction records."
+
+    columns:
+
+      - name: payment_id
+        description: "Unique payment identifier."
+        tests:
+          - unique
+          - not_null
+
+      - name: student_id
+        description: "Student identifier."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_students')
+                field: student_id
+
+      - name: course_id
+        description: "Course identifier."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_courses')
+                field: course_id
+
+      - name: payment_date
+        description: "Payment date."
+        tests:
+          - not_null
+
+      - name: transaction_id
+        description: "Payment transaction identifier."
+        tests:
+          - unique
+          - not_null
+
+      - name: payment_status
+        description: "Current payment status."
+        tests:
+          - accepted_values:
+              arguments:
+                values:
+                  - Paid
+                  - Pending
+                  - Failed
+                  - Unknown
+
+
+      - name: created_at
+        description: "Payment creation date."
+        tests:
+          - not_null
+        
+      - name: updated_at
+        description: "Payment updation date." 
+        tests:
+          - not_null   

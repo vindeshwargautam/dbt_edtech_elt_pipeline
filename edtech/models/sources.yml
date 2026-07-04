@@ -1,0 +1,58 @@
+version: 2
+
+sources:
+  - name: edtech
+    description: "Raw source tables for the EdTech ELT pipeline."
+
+    database: DBTEDTECH
+    schema: EDTECH
+
+    tables:
+
+      - name: students
+        description: "Raw student master data."
+        columns:
+          - name: student_id
+            tests:
+              - unique
+              - not_null
+
+      - name: instructors
+        description: "Raw instructor master data."
+        columns:
+          - name: instructor_id
+            tests:
+              - unique
+              - not_null
+
+      - name: courses
+        description: "Raw course master data."
+        columns:
+          - name: course_id
+            tests:
+              - unique
+              - not_null
+
+      - name: enrollments
+        description: "Raw student enrollment records."
+        columns:
+          - name: enrollment_id
+            tests:
+              - unique
+              - not_null
+
+      - name: course_progress
+        description: "Raw student course progress."
+        columns:
+          - name: progress_id
+            tests:
+              - unique
+              - not_null
+
+      - name: payments
+        description: "Raw payment transactions."
+        columns:
+          - name: payment_id
+            tests:
+              - unique
+              - not_null
